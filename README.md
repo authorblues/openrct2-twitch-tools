@@ -16,7 +16,7 @@ Built using [Oli414's graciously shared boilerplate project](https://github.com/
 3. Download the relay app (`TwitchToolsApp*.exe`). We cannot connect to Twitch chat servers directly from the plugin, so this tool connects to Twitch chat and sends information to the plugin.
 4. Open the relay app, type your Twitch username (just your name, not the full URL) in the top textbox. Press enter, or click the "Start" button.
 5. Change any of the settings you would like to change in the relay app.
-6. Open OpenRCT2. The plugin will connect to the relay app and you should be ready to go.
+6. Open OpenRCT2. The plugin will connect to the relay app once you start/load a scenario and you should be ready to go.
 
 ## How to Setup OpenRCT2
 - [Quickstart Guide for OpenRCT2 on Windows](https://openrct2.org/quickstart/install/windows)
