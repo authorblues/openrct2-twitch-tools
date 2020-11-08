@@ -1,11 +1,13 @@
 # OpenRCT2 Twitch Tools
 Includes a number of features for Twitch streamers to allow viewers to interact with the game (most features can be disabled):
+
 - Unnamed guests will be renamed after people who talk in your stream chat
 - Cheering bits in chat will give money to that user's guest (at a rate of 1 bit = $1 in-game)
 - Cheering more than 100 bits in one message will reset the guest's stats to encourage them to stay in the park
 - Unnamed staff members will be renamed after people who subscribe or resub during the stream
 - Hosts, raids, and gift subs will be shown as a park alert in-game
 - Banned chatters will have their name removed from the game, and the associated guest will explode (optionally)
+
 Built using [Oli414's graciously shared boilerplate project](https://github.com/oli414/openrct2-plugin-boilerplate).
 
 ## How to Setup the Plugin
