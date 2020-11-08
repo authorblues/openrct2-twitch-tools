@@ -44,7 +44,7 @@ function main()
 
 function receiveData(obj)
 {
-	console.log(obj);
+	//console.log(obj);
 	let data = JSON.parse(obj);
 	switch (data.type)
 	{

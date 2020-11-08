@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "rollup --config && babel ./build/TwitchTools.js --out-file ./build/TwitchTools.js && cpy ./build/TwitchTools.js D:/win/Documents/OpenRCT2/plugin/ --rename=TwitchTools.js",
+    "build": "rollup --config && babel ./build/TwitchTools.js --out-file ./build/TwitchTools.js",
     "watch": "npm-watch"
   },
   "watch": {
