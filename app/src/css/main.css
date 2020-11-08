@@ -1,0 +1,40 @@
+body {
+	background: #2c2c2c;
+	color: #CCC;
+}
+
+body, select {
+	font: 12px "Roboto", Georgia, serif;
+	margin: 20px;
+}
+
+h1,h2,h3,h4,h5,h6,strong {
+	color: #FFF;
+}
+
+.center {
+    padding: 0;
+    display: block;
+    margin: 20px auto;
+}
+
+div {
+	margin-bottom: 10px;
+}
+
+label {
+	display: inline-block;
+}
+
+.narrow {
+	width: 50px;
+}
+
+#logging {
+	margin-top: 25px;
+	height: 150px;
+	width: 100%;
+
+	overflow-x: hidden;
+	overflow-y: auto;
+}

@@ -1,0 +1,32 @@
+{
+	"name": "TwitchToolsApp",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"start": "electron .",
+		"dist": "electron-builder"
+	},
+	"keywords": [],
+	"author": "authorblues",
+	"license": "MIT",
+	"devDependencies": {
+		"electron": ">=10.1.5"
+	},
+	"dependencies": {
+		"tmi.js": "^1.5.0"
+	},
+	"build": {
+		"win": {
+			"target": [
+				{
+					"target": "portable",
+					"arch": [
+						"x64",
+						"ia32"
+					]
+				}
+			]
+		}
+	}
+}

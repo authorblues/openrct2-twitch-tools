@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8"/>
+		<title>OpenRCT2 Twitch Tools Relay</title>
+		<link rel="stylesheet" href="css/main.css"/>
+	</head>
+	<body>
+		<div id="options-container">
+			<div>
+				<input type="text" size="30" name="twitchuser" id="twitchuser"/>
+				<button id="setusername">Start</button>
+			</div>
+			<div>
+				<input type="number" id="host-threshold" name="host-threshold" value="10" class="narrow"/>
+				<label for="host-threshold">Threshold for Announcing Hosts</label>
+			</div>
+		</div>
+
+		<div>
+			<pre id="logging"></pre>
+		</div>
+
+		<script src="./app.js"></script>
+	</body>
+</html>
