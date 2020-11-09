@@ -61,6 +61,14 @@ server.on("connection", (x) => {
 	});
 });
 
+server.on("error", (e) => {
+	if (e.code === 'EADDRINUSE')
+	{
+		log('ERROR: cannot connect to port 8088');
+		log('- is the relay app already open?')
+	}
+});
+
 server.listen(port, () => {
 	log('server running');
 });
