@@ -3,7 +3,7 @@ var client = null;
 var clientconnecting = false;
 
 const Net = require('net');
-const port = 8088;
+const port = 61111;
 
 var server = new Net.Server();
 var socket = null;
@@ -38,7 +38,7 @@ for (let config of configoptions)
 
 function isset(id)
 {
-	return document.querySelector('#' + id).checked == 'checked';
+	return !!document.querySelector('#' + id).checked;
 }
 
 function log(msg)
@@ -62,9 +62,10 @@ server.on("connection", (x) => {
 });
 
 server.on("error", (e) => {
+	console.error('server error', e);
 	if (e.code === 'EADDRINUSE')
 	{
-		log('ERROR: cannot connect to port 8088');
+		log('ERROR: cannot connect to port ' + port);
 		log('- is the relay app already open?')
 	}
 });
@@ -106,7 +107,7 @@ function connectToTwitch(names)
 		let data =
 		{
 			type: 'nameguest',
-			name: tags['display-name'],
+			name: makeGuestName(tags['display-name'], tags['username']),
 			userid: tags['user-id'],
 			color: tags['color'],
 			extra: null,
@@ -126,7 +127,7 @@ function connectToTwitch(names)
 		let data =
 		{
 			type: 'sendmoney',
-			name: tags['display-name'],
+			name: makeGuestName(tags['display-name'], tags['username']),
 			userid: tags['user-id'],
 			dollars: isset('cheer-for-cash') ? +tags['bits'] : 0,
 		};
@@ -139,7 +140,7 @@ function connectToTwitch(names)
 		let data =
 		{
 			type: 'namestaff',
-			name: userstate['display-name'],
+			name: makeGuestName(userstate['display-name'], userstate['username']),
 			userid: userstate['user-id'],
 		};
 
@@ -151,7 +152,7 @@ function connectToTwitch(names)
 		let data =
 		{
 			type: 'namestaff',
-			name: userstate['display-name'],
+			name: makeGuestName(userstate['display-name'], userstate['username']),
 			userid: userstate['user-id'],
 		};
 
@@ -163,7 +164,7 @@ function connectToTwitch(names)
 		let data =
 		{
 			type: 'namestaff',
-			name: userstate['display-name'],
+			name: makeGuestName(userstate['display-name'], userstate['username']),
 			userid: userstate['user-id'],
 		};
 
@@ -175,8 +176,8 @@ function connectToTwitch(names)
 		let data =
 		{
 			type: 'namestaff',
-			name: userstate['msg-param-recipient-display-name'],
-			userid: userstate['msg-param-recipient-user-id'],
+			name: makeGuestName(userstate['msg-param-recipient-display-name'], userstate['msg-param-recipient-user-name']),
+			userid: userstate['msg-param-recipient-id'],
 		};
 
 		sendData(data);
@@ -199,7 +200,7 @@ function connectToTwitch(names)
 		let data =
 		{
 			type: 'namestaff',
-			name: userstate['display-name'],
+			name: makeGuestName(userstate['display-name'], userstate['username']),
 			userid: userstate['user-id'],
 		};
 
@@ -241,6 +242,14 @@ function connectToTwitch(names)
 
 		sendData(data);
 	});
+}
+
+// this method only exists because the plugin interface doesn't seem to expose
+// any information about what language the UI is set to, so we default to using
+// usernames if they seem to be more than just capitalization preferences
+function makeGuestName(display, username)
+{
+	return display.toLowerCase() == username.toLowerCase() ? display : username;
 }
 
 function getHostThreshold()

@@ -1,11 +1,11 @@
 body {
 	background: #2c2c2c;
 	color: #CCC;
+	margin: 20px;
 }
 
 body, select {
 	font: 12px "Roboto", Georgia, serif;
-	margin: 20px;
 }
 
 h1,h2,h3,h4,h5,h6,strong {
@@ -23,6 +23,11 @@ div {
 }
 
 label {
+	display: inline-block;
+	margin-right: 5px;
+}
+
+select {
 	display: inline-block;
 }
 

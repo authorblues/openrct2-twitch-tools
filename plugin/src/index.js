@@ -1,6 +1,8 @@
 var usermap = {};
 
-var msgbfr = "";
+const MAX_TRACKING = 25;
+const PORT = 61111;
+
 function main()
 {
 	let connected = false;
@@ -9,7 +11,7 @@ function main()
 	function connect()
 	{
 		if (connected) return;
-		socket.connect(8088, "127.0.0.1", () => {
+		socket.connect(PORT, "localhost", () => {
 			connected = true;
 		});
 	}
@@ -29,8 +31,15 @@ function main()
 		else console.log("Connection error: " + err);
 	})
 
+	let msgbfr = "";
 	socket.on("data", (msg) => {
 		msgbfr += msg;
+	});
+
+	connect();
+
+	context.subscribe('interval.tick', () =>
+	{
 		while (msgbfr.includes("\n"))
 		{
 			let ndx = msgbfr.indexOf("\n");
@@ -39,12 +48,15 @@ function main()
 		}
 	});
 
-	connect();
+	context.subscribe('interval.day', () =>
+	{
+		shuffleTracking();
+	});
 }
 
 function receiveData(obj)
 {
-	console.log(obj);
+	//console.log(obj);
 	let data = JSON.parse(obj);
 	switch (data.type)
 	{
@@ -84,20 +96,39 @@ function receiveData(obj)
 	}
 }
 
+function shuffleTracking()
+{
+	let peeps = map.getAllEntities('peep');
+	for (let i = 0; i < peeps.length; i++)
+		peeps[i].setFlag('tracking', false);
+
+	peeps = peeps.filter(x => x.peepType === 'guest' && !x.name.includes(' '));
+	for (let i = peeps.length - 1; i > 0; i--)
+	{
+		const j = Math.floor(Math.random() * (i + 1));
+		[peeps[i], peeps[j]] = [peeps[j], peeps[i]];
+	}
+
+	for (let i = 0; i < peeps.length && i < MAX_TRACKING; i++)
+		peeps[i].setFlag('tracking', true);
+}
+
 function findPeep(data)
 {
-	let eid = usermap[data.userid].eid;
-	if (!eid) return null;
+	let user = usermap[data.userid];
+	if (!user) return null;
 
 	let peeps = map.getAllEntities('peep');
 	for (let i = 0; i < peeps.length; i++)
-		if (peeps[i].id === eid) return peeps[i];
+		if (peeps[i].id === user.eid) return peeps[i];
 
 	return null;
 }
 
 function peepFilter(peeps, peepType)
 {
+	peeps = peeps.filter(x => x.peepType == peepType);
+
 	if (peepType === 'staff') return peeps;
 
 	peeps.sort((a,b) => b.cash - a.cash);
@@ -137,8 +168,10 @@ function nameRandomPeep(data, peepType, force)
 		// no guests without a name
 		if (candidates.length == 0)
 		{
+			console.log('no candidates')
 			if (!force) return null;
 			candidates = peepFilter(allpeeps, peepType);
+			console.log(candidates);
 		}
 
 		// if we got here and there are still no candidates, nothing to do
@@ -151,7 +184,6 @@ function nameRandomPeep(data, peepType, force)
 
 	//peep.tshirtColour = ???
 
-	peep.setFlag("tracking", true);
 	if (peep.happinessTarget < 255 - HAPPINESS_BONUS)
 		peep.happinessTarget += HAPPINESS_BONUS;
 	if (peep.energyTarget < 128 - ENERGY_BONUS)
@@ -227,14 +259,14 @@ function removeName(data)
 	else
 	{
 		var job = peep.staffType;
-		peep.name = "Unnamed " + job.charAt(0).toUpperCase() + job.slice(1);
+		peep.name = job.charAt(0).toUpperCase() + job.slice(1) + " X";
 	}
 	return peep;
 }
 
 registerPlugin({
     name: "TwitchTools",
-    version: "0.1",
+    version: "1.1.0",
     licence: "MIT",
     authors: ["authorblues"],
     type: "local",
